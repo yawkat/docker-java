@@ -77,9 +77,7 @@ public abstract class AbstractRequest<R> {
         return promise;
     }
 
-    protected Connection acquireConnection() throws InterruptedException {
-        return client.acquireAttached();
-    }
+    protected abstract Connection acquireConnection() throws InterruptedException;
 
     protected void init() {}
 

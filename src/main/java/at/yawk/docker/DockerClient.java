@@ -65,6 +65,10 @@ public class DockerClient {
         return new BuildImage(this);
     }
 
+    public WaitContainer waitContainer() {
+        return new WaitContainer(this);
+    }
+
     ///// BUILDER
 
     public static Builder builder() {

@@ -15,9 +15,18 @@ import lombok.experimental.Accessors;
 public class SimpleRequest<B, R> extends AbstractHeaderRequest<R> {
     private MessageEncoder<B> bodyEncoder;
     private ResponseDecoder<? extends R> responseDecoder;
+    /**
+     * Whether we can use a pooled connection. Set to false if this request can take a long time with no received data.
+     */
+    private boolean pooled = true;
 
     private SimpleRequest(HttpClient client) {
         super(client);
+    }
+
+    @Override
+    protected Connection acquireConnection() throws InterruptedException {
+        return pooled ? client.acquireAttached() : client.acquireDetached();
     }
 
     public static <B, R> SimpleRequest<B, R> create(HttpClient client) {
