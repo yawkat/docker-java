@@ -20,7 +20,7 @@ public class DeleteContainer extends AbstractQuery<Void> {
 
     @Override
     protected void decorate(SimpleRequest<Object, Void> request) {
-        request.delete().pathBuilder("containers", id, "delete")
+        request.delete().pathBuilder("containers", id)
                 .query("v", flagToString(volumes))
                 .query("force", flagToString(force));
     }
