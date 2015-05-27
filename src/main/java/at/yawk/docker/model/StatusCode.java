@@ -13,5 +13,5 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StatusCode {
     @JsonProperty("StatusCode")
-    String statusCode;
+    int statusCode;
 }
