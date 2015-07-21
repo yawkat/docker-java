@@ -11,7 +11,6 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.util.AttributeKey;
 import java.io.Closeable;
-import java.io.IOException;
 import java.net.URL;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -102,7 +101,7 @@ public class HttpClient implements Closeable {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         bootstrap.group().shutdownGracefully();
     }
 

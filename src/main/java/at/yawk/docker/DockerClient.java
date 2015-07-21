@@ -3,6 +3,7 @@ package at.yawk.docker;
 import at.yawk.docker.http.HttpClient;
 import at.yawk.docker.http.JsonMessageEncoder;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.Closeable;
 import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -15,7 +16,7 @@ import lombok.experimental.Accessors;
  * @author yawkat
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class DockerClient {
+public class DockerClient implements Closeable {
     final HttpClient httpClient;
 
     final ObjectMapper objectMapper;
@@ -67,6 +68,11 @@ public class DockerClient {
 
     public WaitContainer waitContainer() {
         return new WaitContainer(this);
+    }
+
+    @Override
+    public void close() {
+        httpClient.close();
     }
 
     ///// BUILDER
