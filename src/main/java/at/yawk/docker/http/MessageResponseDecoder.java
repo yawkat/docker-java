@@ -17,19 +17,19 @@ public class MessageResponseDecoder<R> implements ResponseDecoder<R> {
 
     protected void handleErrorStatus(ResponsePromise<? super R> promise, ByteBuf body) throws Exception {
         ByteBuf bodyCopy = body != null && body.isReadable() ? Unpooled.copiedBuffer(body) : Unpooled.EMPTY_BUFFER;
-        promise.setFailure(new HttpStatusException(promise.status(), bodyCopy));
+        promise.completeExceptionally(new HttpStatusException(promise.status(), bodyCopy));
     }
 
     @Override
     public void decode(ResponsePromise<? super R> promise, ByteBuf body) {
         try {
             if (promise.statusCode() >= 100 && promise.statusCode() < 300) {
-                promise.setSuccess(decoder.decode(body));
+                promise.complete(decoder.decode(body));
             } else {
                 handleErrorStatus(promise, body);
             }
         } catch (Exception e) {
-            promise.setFailure(e);
+            promise.completeExceptionally(e);
         }
     }
 }

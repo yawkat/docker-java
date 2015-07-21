@@ -45,7 +45,7 @@ public abstract class AbstractRequest<R> {
         assert connection == null;
         connection = Util.uninterruptible(this::acquireConnection);
         connection.exceptionHandler = e -> {
-            if (!promise.tryFailure(e)) {
+            if (!promise.completeExceptionally(e)) {
                 handleLateException(e);
             }
         };

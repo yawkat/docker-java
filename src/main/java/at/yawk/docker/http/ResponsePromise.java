@@ -2,7 +2,7 @@ package at.yawk.docker.http;
 
 import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpResponseStatus;
-import io.netty.util.concurrent.DefaultPromise;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -13,7 +13,7 @@ import java.util.concurrent.TimeoutException;
  *
  * @author yawkat
  */
-public class ResponsePromise<R> extends DefaultPromise<R> implements StatusProvider {
+public class ResponsePromise<R> extends CompletableFuture<R> implements StatusProvider {
     HttpResponse response = null;
 
     ResponsePromise() {}
