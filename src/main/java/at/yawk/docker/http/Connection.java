@@ -55,8 +55,10 @@ class Connection implements Closeable {
         if (attached) {
             if (channel.isActive()) {
                 clearHandlers();
+                log.trace("Releasing pooled channel {}", channel);
                 pool.channelPool.release(channel);
             } else {
+                log.trace("Closing pooled channel {}", channel);
                 channel.close();
             }
         } else {

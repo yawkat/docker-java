@@ -5,7 +5,7 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.pool.AbstractChannelPoolHandler;
 import io.netty.channel.pool.ChannelPool;
-import io.netty.channel.pool.FixedChannelPool;
+import io.netty.channel.pool.SimpleChannelPool;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
@@ -21,8 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class HttpClient implements Closeable {
     private static final AttributeKey<Connection> CONNECTION_ATTRIBUTE = AttributeKey.newInstance("connection");
-
-    private static final int MAX_CHANNEL_COUNT = 4;
 
     private final Bootstrap bootstrap;
     final ChannelPool channelPool;
@@ -40,12 +38,12 @@ public class HttpClient implements Closeable {
                 initConnection(ch);
             }
         });
-        this.channelPool = new FixedChannelPool(bootstrap, new AbstractChannelPoolHandler() {
+        this.channelPool = new SimpleChannelPool(bootstrap, new AbstractChannelPoolHandler() {
             @Override
             public void channelCreated(Channel ch) throws Exception {
                 initConnection(ch);
             }
-        }, MAX_CHANNEL_COUNT);
+        });
     }
 
     public static HttpClient create(URL url) {
@@ -90,7 +88,9 @@ public class HttpClient implements Closeable {
     }
 
     Connection acquireAttached() throws InterruptedException {
+        log.trace("Requesting pooled channel...");
         Channel channel = channelPool.acquire().sync().getNow();
+        log.trace("Acquired pooled channel {}", channel);
         Connection connection = getConnection(channel);
         connection.attached = true;
         return connection;
