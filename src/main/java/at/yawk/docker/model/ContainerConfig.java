@@ -67,7 +67,7 @@ public class ContainerConfig {
     @JsonProperty("Cmd")
     List<String> cmd;
     @JsonProperty("Entrypoint")
-    String entrypoint;
+    List<String> entrypoint;
     /**
      * Image to create this container from.
      */
