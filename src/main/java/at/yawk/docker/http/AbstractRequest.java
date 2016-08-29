@@ -1,7 +1,6 @@
 package at.yawk.docker.http;
 
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
@@ -51,7 +50,7 @@ public abstract class AbstractRequest<R> {
         };
         connection.setInitializer(c -> {
             init();
-            c.append(new SimpleChannelInboundHandler<HttpObject>() {
+            c.append(new CompatSimpleChannelInboundHandler<HttpObject>() {
                 @Override
                 protected void messageReceived(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
                     handleObject(msg);
@@ -61,7 +60,7 @@ public abstract class AbstractRequest<R> {
             request.headers().add("Host", client.host);
             if (log.isTraceEnabled()) {
                 log.trace("> {} {} {}", request.method(), request.uri(), request.protocolVersion());
-                for (Map.Entry<CharSequence, CharSequence> header : request.headers()) {
+                for (Map.Entry<? extends CharSequence, ? extends CharSequence> header : request.headers()) {
                     log.trace("> {}: {}", header.getKey(), header.getValue());
                 }
                 if (request instanceof FullHttpRequest) {
@@ -88,7 +87,7 @@ public abstract class AbstractRequest<R> {
             promise.response = (HttpResponse) object;
             if (log.isTraceEnabled()) {
                 log.trace("< {}", promise.response.status().toString());
-                for (Map.Entry<CharSequence, CharSequence> header : promise.response.headers()) {
+                for (Map.Entry<? extends CharSequence, ? extends CharSequence> header : promise.response.headers()) {
                     log.trace("< {}: {}", header.getKey(), header.getValue());
                 }
             }

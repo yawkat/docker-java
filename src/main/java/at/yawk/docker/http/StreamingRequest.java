@@ -144,7 +144,7 @@ public class StreamingRequest<S, R> extends AbstractHeaderRequest<ResponseStream
                 }
             });
             connection.append(bodyDecoder);
-            connection.append(new SimpleChannelInboundHandler<Object>(false) {
+            connection.append(new CompatSimpleChannelInboundHandler(false) {
                 @Override
                 public boolean acceptInboundMessage(Object msg) throws Exception {
                     // http responses are handled below
@@ -231,6 +231,21 @@ public class StreamingRequest<S, R> extends AbstractHeaderRequest<ResponseStream
         @Override
         public void setDecoderResult(DecoderResult decoderResult) {
             response.setDecoderResult(decoderResult);
+        }
+
+        @Override
+        public HttpResponseStatus getStatus() {
+            return status();
+        }
+
+        @Override
+        public DecoderResult getDecoderResult() {
+            return decoderResult();
+        }
+
+        @Override
+        public HttpVersion getProtocolVersion() {
+            return protocolVersion();
         }
     }
 }

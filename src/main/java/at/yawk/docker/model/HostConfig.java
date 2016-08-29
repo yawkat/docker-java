@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
 import lombok.Data;
+import lombok.Value;
 
 /**
  * @author yawkat
@@ -53,4 +54,19 @@ public class HostConfig {
     String networkMode;
     @JsonProperty("Devices")
     List<String> devices;
+
+    @JsonProperty("BlkioDeviceReadBps")
+    List<DeviceRateLimit> blkioDeviceReadBps;
+    @JsonProperty("BlkioDeviceWriteBps")
+    List<DeviceRateLimit> blkioDeviceWriteBps;
+    @JsonProperty("BlkioDeviceReadIOps")
+    List<DeviceRateLimit> blkioDeviceReadIOps;
+    @JsonProperty("BlkioDeviceWriteIOps")
+    List<DeviceRateLimit> blkioDeviceWriteIOps;
+
+    @Value
+    public static class DeviceRateLimit {
+        String path;
+        int rate;
+    }
 }

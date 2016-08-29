@@ -108,7 +108,7 @@ public class DockerClient implements Closeable {
                 objectMapper.findAndRegisterModules();
             }
             HttpClient httpClient = HttpClient.create(url);
-            httpClient.setUrlRewrite(u -> "/v1.17" + u);
+            httpClient.setUrlRewrite(u -> "/v1.18" + u);
             return new DockerClient(
                     httpClient,
                     objectMapper,
