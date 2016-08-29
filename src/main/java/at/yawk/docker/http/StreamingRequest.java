@@ -198,9 +198,9 @@ public class StreamingRequest<S, R> extends AbstractHeaderRequest<ResponseStream
     private static class DelegateHttpResponse implements HttpResponse {
         private final HttpResponse response;
 
-        @Override
+        //@Override
         public HttpResponseStatus status() {
-            return response.status();
+            return NettyCompat.status(response);
         }
 
         @Override
@@ -213,9 +213,9 @@ public class StreamingRequest<S, R> extends AbstractHeaderRequest<ResponseStream
             return response.setProtocolVersion(version);
         }
 
-        @Override
+        //@Override
         public HttpVersion protocolVersion() {
-            return response.protocolVersion();
+            return NettyCompat.protocolVersion(response);
         }
 
         @Override
@@ -223,9 +223,9 @@ public class StreamingRequest<S, R> extends AbstractHeaderRequest<ResponseStream
             return response.headers();
         }
 
-        @Override
+        //@Override
         public DecoderResult decoderResult() {
-            return response.decoderResult();
+            return NettyCompat.decoderResult(response);
         }
 
         @Override

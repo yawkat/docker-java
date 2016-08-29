@@ -2,10 +2,14 @@ package at.yawk.docker.http;
 
 import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import lombok.SneakyThrows;
 
 /**
  * Promise that is returned once connection has been established by the Request class, and finishes once headers are
@@ -19,12 +23,13 @@ public class ResponsePromise<R> extends CompletableFuture<R> implements StatusPr
     ResponsePromise() {}
 
     public String header(String key) {
-        return response.headers().get(key).toString();
+        return response.headers().get(key);
     }
 
     @Override
+    @SneakyThrows
     public HttpResponseStatus status() {
-        return response.status();
+        return NettyCompat.status(response);
     }
 
     @Override

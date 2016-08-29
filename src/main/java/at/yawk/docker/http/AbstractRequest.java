@@ -59,7 +59,10 @@ public abstract class AbstractRequest<R> {
             HttpRequest request = getRequest();
             request.headers().add("Host", client.host);
             if (log.isTraceEnabled()) {
-                log.trace("> {} {} {}", request.method(), request.uri(), request.protocolVersion());
+                log.trace("> {} {} {}",
+                          NettyCompat.method(request),
+                          NettyCompat.uri(request),
+                          NettyCompat.protocolVersion(request));
                 for (Map.Entry<? extends CharSequence, ? extends CharSequence> header : request.headers()) {
                     log.trace("> {}: {}", header.getKey(), header.getValue());
                 }
@@ -86,7 +89,7 @@ public abstract class AbstractRequest<R> {
         if (object instanceof HttpResponse) {
             promise.response = (HttpResponse) object;
             if (log.isTraceEnabled()) {
-                log.trace("< {}", promise.response.status().toString());
+                log.trace("< {}", NettyCompat.status(promise.response));
                 for (Map.Entry<? extends CharSequence, ? extends CharSequence> header : promise.response.headers()) {
                     log.trace("< {}: {}", header.getKey(), header.getValue());
                 }
